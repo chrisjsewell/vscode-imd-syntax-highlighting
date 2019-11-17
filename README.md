@@ -1,6 +1,8 @@
 # IMarkdown
 
 An extension for a proposed "IMarkdown" specification (similar to RMarkdown).
+This syntax extends 'basic' Markdown, by adding code-folding for `:::` blocks,
+and correctly highlighting programming languages in 'chunk' code blocks.
 
 ## Features
 
