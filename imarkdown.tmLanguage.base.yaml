@@ -32,12 +32,47 @@ repository:
   fenced_code_block_unknown:
     begin: (^|\G)(\s*)(`{3,}|~{3,})\s*(?=([^`~]*)?$)
     beginCaptures:
-      '3': {name: punctuation.definition.imarkdown}
-      '4': {name: fenced_code.block.language}
+      '3':
+        name: punctuation.definition.imarkdown
+      '4':
+        name: fenced_code.block.language.imarkdown
+        patterns:
+          - {include: '#boolean'}
+          - {include: '#dblquoted'}
+          - {include: '#singlequoted'}
     end: (^|\G)(\2|\s{0,3})(\3)\s*$
     endCaptures:
       '3': {name: punctuation.definition.imarkdown}
     name: markup.fenced_code.block.imarkdown
+  # TODO fenced_div_block (or just first line?)
+  # fenced_div_block:
+  #   begin: (^|\\G)(\\s*)(\:{3,})\\s*\\{([^\s]+)([^\\}]*\\})\\s*$)
+  #   beginCaptures:
+  #     '3':
+  #       name: punctuation.definition.imarkdown
+  #     '4':
+  #       name: entity.name.type.fenced_div.block.language.imarkdown
+  #     '5':
+  #       name: fenced_div.block.imarkdown
+  #       patterns:
+  #         - {include: '#boolean'}
+  #         - {include: '#dblquoted'}
+  #         - {include: '#singlequoted'}
+  #   end: (^|\G)(\2|\s{0,3})(\3)\s*$
+  #   endCaptures:
+  #     '3': {name: punctuation.definition.imarkdown}
+  #   name: markup.fenced_div.block.imarkdown
+  boolean:
+    name: constant.language.boolean.imarkdown
+    match: \b(?i:true|false)\b
+  dblquoted:
+    name: string.quoted.double.imarkdown
+    begin: "\""
+    end: "\""
+  singlequoted:
+    name: string.quoted.single.imarkdown
+    begin: "'"
+    end: "'"
   heading:
     match: (?:^|\G)[ ]{0,3}((#{1,6})\s+(?=[\S[^#]]).*?\s*(#{1,6})?)$\n?
     captures:
