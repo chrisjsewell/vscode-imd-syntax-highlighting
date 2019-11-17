@@ -2,6 +2,12 @@
 
 This is the README for your extension "IMarkdown".
 
+## Features
+
+Syntax highlighting and code-folding for IMarkdown:
+
+![Example](images/example.png)
+
 <!-- ## Features
 
 Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
@@ -57,7 +63,7 @@ Added features X, Y, and Z.
 * Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
 * Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets -->
 
-### For more information
+## For more information
 
 * [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
 * [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
