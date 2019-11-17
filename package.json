@@ -1,25 +1,46 @@
 {
     "name": "vscode-imarkdown-tm-grammar",
-    "displayName": "imd",
+    "displayName": "IMarkdown",
     "description": "A syntax highlighter for a proposed IMarkdown spec",
     "version": "0.0.1",
     "engines": {
         "vscode": "^1.40.0"
     },
+    "publisher": "chrisjsewell",
+    "authors": [
+        "type": "git",
+        "url": "https://github.com/chrisjsewell/vscode-imd-syntax-highlighting.git"
+    },
+    "homepage": "https://github.com/chrisjsewell/vscode-imd-syntax-highlighting/blob/master/README.md",
     "categories": [
         "Programming Languages"
     ],
     "contributes": {
-        "languages": [{
-            "id": "imarkdown",
-            "aliases": ["IMarkdown", "imarkdown"],
-            "extensions": [".imd",".imarkdown"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "imarkdown",
-            "scopeName": "source.imarkdown",
-            "path": "./syntaxes/imarkdown.tmLanguage.json"
-        }]
+        "languages": [
+            {
+                "id": "imarkdown",
+                "aliases": [
+                    "IMarkdown",
+                    "imarkdown"
+                ],
+                "extensions": [
+                    ".imd",
+                    ".imarkdown"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "imarkdown",
+                "scopeName": "text.html.imarkdown",
+                "path": "./syntaxes/imarkdown.tmLanguage"
+            }
+        ]
+    },
+    "devDependencies": {
+        "js-yaml": "^3.13.1",
+        "plist": "^3.0.1",
+        "vscode": "^1.1.36"
     }
 }

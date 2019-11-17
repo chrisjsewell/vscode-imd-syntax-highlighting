@@ -1,0 +1,466 @@
+fileTypes: [imd, imdown, imarkdown, imarkdn]
+keyEquivalent: ^~M
+name: IMarkdown
+patterns:
+- {include: '#frontMatter'}
+- {include: '#block'}
+repository:
+  block:
+    patterns:
+    - {include: '#separator'}
+    - {include: '#heading'}
+    - {include: '#blockquote'}
+    - {include: '#lists'}
+    - {include: '#fenced_code_block'}
+    - {include: '#raw_block'}
+    - {include: '#link-def'}
+    - {include: '#html'}
+    - {include: '#paragraph'}
+  blockquote:
+    begin: (^|\G)[ ]{0,3}(>) ?
+    captures:
+      '2': {name: punctuation.definition.quote.begin.imarkdown}
+    name: markup.quote.imarkdown
+    patterns:
+    - {include: '#block'}
+    while: (^|\G)\s*(>) ?
+{{languageDefinitions}}
+  fenced_code_block:
+    patterns:
+    {{languageIncludes}}
+    - {include: '#fenced_code_block_unknown'}
+  fenced_code_block_unknown:
+    begin: (^|\G)(\s*)(`{3,}|~{3,})\s*(?=([^`~]*)?$)
+    beginCaptures:
+      '3': {name: punctuation.definition.imarkdown}
+      '4': {name: fenced_code.block.language}
+    end: (^|\G)(\2|\s{0,3})(\3)\s*$
+    endCaptures:
+      '3': {name: punctuation.definition.imarkdown}
+    name: markup.fenced_code.block.imarkdown
+  heading:
+    match: (?:^|\G)[ ]{0,3}((#{1,6})\s+(?=[\S[^#]]).*?\s*(#{1,6})?)$\n?
+    captures:
+      '1':
+        patterns:
+        - match: (#{6})\s+(?=[\S[^#]])(.*?)\s*(\s+#+)?$\n?
+          name: 'heading.6.imarkdown'
+          captures:
+            '1': {name: punctuation.definition.heading.imarkdown}
+            '2': {name: entity.name.section.imarkdown}
+            '3': {name: punctuation.definition.heading.imarkdown}
+        - match: (#{5})\s+(?=[\S[^#]])(.*?)\s*(\s+#+)?$\n?
+          name: 'heading.5.imarkdown'
+          captures:
+            '1': {name: punctuation.definition.heading.imarkdown}
+            '2': {name: entity.name.section.imarkdown}
+            '3': {name: punctuation.definition.heading.imarkdown}
+        - match: (#{4})\s+(?=[\S[^#]])(.*?)\s*(\s+#+)?$\n?
+          name: 'heading.4.imarkdown'
+          captures:
+            '1': {name: punctuation.definition.heading.imarkdown}
+            '2': {name: entity.name.section.imarkdown}
+            '3': {name: punctuation.definition.heading.imarkdown}
+        - match: (#{3})\s+(?=[\S[^#]])(.*?)\s*(\s+#+)?$\n?
+          name: 'heading.3.imarkdown'
+          captures:
+            '1': {name: punctuation.definition.heading.imarkdown}
+            '2': {name: entity.name.section.imarkdown}
+            '3': {name: punctuation.definition.heading.imarkdown}
+        - match: (#{2})\s+(?=[\S[^#]])(.*?)\s*(\s+#+)?$\n?
+          name: 'heading.2.imarkdown'
+          captures:
+            '1': {name: punctuation.definition.heading.imarkdown}
+            '2': {name: entity.name.section.imarkdown}
+            '3': {name: punctuation.definition.heading.imarkdown}
+        - match: (#{1})\s+(?=[\S[^#]])(.*?)\s*(\s+#+)?$\n?
+          name: 'heading.1.imarkdown'
+          captures:
+            '1': {name: punctuation.definition.heading.imarkdown}
+            '2': {name: entity.name.section.imarkdown}
+            '3': {name: punctuation.definition.heading.imarkdown}
+    name: markup.heading.imarkdown
+    patterns:
+    - {include: '#inline'}
+  heading-setext:
+    patterns:
+    - {match: '^(={3,})(?=[ \t]*$\n?)', name: markup.heading.setext.1.imarkdown}
+    - {match: '^(-{3,})(?=[ \t]*$\n?)', name: markup.heading.setext.2.imarkdown}
+  html:
+    patterns:
+    - begin: (^|\G)\s*(<!--)
+      captures:
+        '1': {name: punctuation.definition.comment.html}
+        '2': {name: punctuation.definition.comment.html}
+      end: (-->)
+      name: comment.block.html
+    - begin: (?i)(^|\G)\s*(?=<(script|style|pre)(\s|$|>)(?!.*?</(script|style|pre)>))
+      end: (?i)(.*)((</)(script|style|pre)(>))
+      endCaptures:
+        '1': { patterns: [ {include: text.html.derivative} ]}
+        '2': {name: meta.tag.structure.$4.end.html}
+        '3': {name: punctuation.definition.tag.begin.html}
+        '4': {name: entity.name.tag.html}
+        '5': {name: punctuation.definition.tag.end.html}
+      patterns:
+      - begin: (\s*|$)
+        patterns:
+        - {include: text.html.derivative}
+        while: (?i)^(?!.*</(script|style|pre)>)
+    - begin: (?i)(^|\G)\s*(?=</?[a-zA-Z]+[^\s/&gt;]*(\s|$|/?>))
+      patterns:
+      - {include: text.html.derivative}
+      while: ^(?!\s*$)
+    - begin: (^|\G)\s*(?=(<[a-zA-Z0-9\-](/?>|\s.*?>)|</[a-zA-Z0-9\-]>)\s*$)
+      patterns:
+      - {include: text.html.derivative}
+      while: ^(?!\s*$)
+  link-def:
+    captures:
+      '1': {name: punctuation.definition.constant.imarkdown}
+      '10': {name: punctuation.definition.string.end.imarkdown}
+      '11': {name: string.other.link.description.title.imarkdown}
+      '12': {name: punctuation.definition.string.begin.imarkdown}
+      '13': {name: punctuation.definition.string.end.imarkdown}
+      '2': {name: constant.other.reference.link.imarkdown}
+      '3': {name: punctuation.definition.constant.imarkdown}
+      '4': {name: punctuation.separator.key-value.imarkdown}
+      '5': {name: punctuation.definition.link.imarkdown}
+      '6': {name: markup.underline.link.imarkdown}
+      '7': {name: punctuation.definition.link.imarkdown}
+      '8': {name: string.other.link.description.title.imarkdown}
+      '9': {name: punctuation.definition.string.begin.imarkdown}
+    match: >
+      (?x)
+        \s*            # Leading whitespace
+        (\[)([^]]+?)(\])(:)    # Reference name
+        [ \t]*          # Optional whitespace
+        (<?)(\S+?)(>?)      # The url
+        [ \t]*          # Optional whitespace
+        (?:
+            ((\().+?(\)))    # Match title in quotes…
+          | ((").+?("))    # or in parens.
+        )?            # Title is optional
+        \s*            # Optional whitespace
+        $
+    name: meta.link.reference.def.imarkdown
+  list_paragraph:
+    begin: (^|\G)(?=\S)(?![*+->]\s|[0-9]+\.\s)
+    name: meta.paragraph.imarkdown
+    patterns:
+    - {include: '#inline'}
+    - {include: text.html.derivative}
+    - {include: '#heading-setext'}
+    while: (^|\G)(?!\s*$|#|[ ]{0,3}([-*_>][ ]{2,}){3,}[ \t]*$\n?|[ ]{0,3}[*+->]|[
+      ]{0,3}[0-9]+\.)
+  lists:
+    patterns:
+    - begin: (^|\G)([ ]{0,3})([*+-])([ \t])
+      beginCaptures:
+        '3': {name: punctuation.definition.list.begin.imarkdown}
+      comment: Currently does not support un-indented second lines.
+      name: markup.list.unnumbered.imarkdown
+      patterns:
+      - {include: '#block'}
+      - {include: '#list_paragraph'}
+      while: ((^|\G)([ ]{2,4}|\t))|(^[ \t]*$)
+    - begin: (^|\G)([ ]{0,3})([0-9]+\.)([ \t])
+      beginCaptures:
+        '3': {name: punctuation.definition.list.begin.imarkdown}
+      name: markup.list.numbered.imarkdown
+      patterns:
+      - {include: '#block'}
+      - {include: '#list_paragraph'}
+      while: ((^|\G)([ ]{2,4}|\t))|(^[ \t]*$)
+  paragraph:
+    begin: (^|\G)[ ]{0,3}(?=\S)
+    name: meta.paragraph.imarkdown
+    patterns:
+    - {include: '#inline'}
+    - {include: text.html.derivative}
+    - {include: '#heading-setext'}
+    while: (^|\G)((?=\s*[-=]{3,}\s*$)|[ ]{4,}(?=\S))
+  raw_block: {begin: '(^|\G)([ ]{4}|\t)', name: markup.raw.block.imarkdown, while: '(^|\G)([
+      ]{4}|\t)'}
+  separator: {match: '(^|\G)[ ]{0,3}([\*\-\_])([ ]{0,2}\2){2,}[ \t]*$\n?', name: meta.separator.imarkdown}
+  frontMatter:
+    begin: \A-{3}\s*$
+    contentName: meta.embedded.block.frontmatter
+    patterns:
+    - {include: source.yaml}
+    end: (^|\G)-{3}|\.{3}\s*$
+  inline:
+    patterns:
+    - {include: '#ampersand'}
+    - {include: '#bracket'}
+    - {include: '#bold'}
+    - {include: '#italic'}
+    - {include: '#raw'}
+    - {include: '#escape'}
+    - {include: '#image-inline'}
+    - {include: '#image-ref'}
+    - {include: '#link-email'}
+    - {include: '#link-inet'}
+    - {include: '#link-inline'}
+    - {include: '#link-ref'}
+    - {include: '#link-ref-literal'}
+    - {include: '#link-ref-shortcut'}
+  ampersand:
+    comment: "imarkdown will convert this for us. We match it so that the HTML grammar will not mark it up as invalid."
+    match: '&(?!([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+);)'
+    name: meta.other.valid-ampersand.imarkdown
+  bold:
+    begin: >
+      (?x)
+      (\*\*(?=\w)|(?<!\w)\*\*|(?<!\w)\b__)(?=\S)
+      (?=
+        (
+          <[^>]*+>              # HTML tags
+          | (?<raw>`+)([^`]|(?!(?<!`)\k<raw>(?!`))`)*+\k<raw>
+                            # Raw
+          | \\[\\`*_{}\[\]()#.!+\->]?+      # Escapes
+          | \[
+          (
+              (?<square>          # Named group
+                [^\[\]\\]        # Match most chars
+                | \\.            # Escaped chars
+                | \[ \g<square>*+ \]    # Nested brackets
+              )*+
+            \]
+            (
+              (              # Reference Link
+                [ ]?          # Optional space
+                \[[^\]]*+\]        # Ref name
+              )
+              | (              # Inline Link
+                \(            # Opening paren
+                  [ \t]*+        # Optional whitespace
+                  <?(.*?)>?      # URL
+                  [ \t]*+        # Optional whitespace
+                  (          # Optional Title
+                    (?<title>['"])
+                    (.*?)
+                    \k<title>
+                  )?
+                \)
+              )
+            )
+          )
+          | (?!(?<=\S)\1).            # Everything besides
+                            # style closer
+        )++
+        (?<=\S)(?=__\b|\*\*)\1                # Close
+      )
+    captures:
+      '1': {name: punctuation.definition.bold.imarkdown}
+    end: (?<=\S)(\1)
+    name: markup.bold.imarkdown
+    patterns:
+    - applyEndPatternLast: 1
+      begin: (?=<[^>]*?>)
+      end: (?<=>)
+      patterns:
+      - {include: text.html.derivative}
+    - {include: '#escape'}
+    - {include: '#ampersand'}
+    - {include: '#bracket'}
+    - {include: '#raw'}
+    - {include: '#bold'}
+    - {include: '#italic'}
+    - {include: '#image-inline'}
+    - {include: '#link-inline'}
+    - {include: '#link-inet'}
+    - {include: '#link-email'}
+    - {include: '#image-ref'}
+    - {include: '#link-ref-literal'}
+    - {include: '#link-ref'}
+    - {include: '#link-ref-shortcut'}
+  bracket:
+    comment: "imarkdown will convert this for us. We match it so that the HTML grammar will not mark it up as invalid."
+    match: '<(?![a-zA-Z/?\$!])'
+    name: meta.other.valid-bracket.imarkdown
+  escape: {match: '\\[-`*_#+.!(){}\[\]\\>]', name: constant.character.escape.imarkdown}
+  image-inline:
+    captures:
+      '1': {name: punctuation.definition.string.begin.imarkdown}
+      '10': {name: punctuation.definition.string.imarkdown}
+      '11': {name: punctuation.definition.string.imarkdown}
+      '12': {name: string.other.link.description.title.imarkdown}
+      '13': {name: punctuation.definition.string.imarkdown}
+      '14': {name: punctuation.definition.string.imarkdown}
+      '15': {name: punctuation.definition.metadata.imarkdown}
+      '2': {name: string.other.link.description.imarkdown}
+      '4': {name: punctuation.definition.string.end.imarkdown}
+      '5': {name: punctuation.definition.metadata.imarkdown}
+      '6': {name: punctuation.definition.link.imarkdown}
+      '7': {name: markup.underline.link.image.imarkdown}
+      '8': {name: punctuation.definition.link.imarkdown}
+      '9': {name: string.other.link.description.title.imarkdown}
+    match: >
+      (?x)
+        (\!\[)((?<square>[^\[\]\\]|\\.|\[\g<square>*+\])*+)(\])
+                      # Match the link text.
+        (\()            # Opening paren for url
+          (<?)(\S+?)(>?)      # The url
+          [ \t]*          # Optional whitespace
+          (?:
+              ((\().+?(\)))    # Match title in parens…
+            | ((").+?("))    # or in quotes.
+          )?            # Title is optional
+          \s*            # Optional whitespace
+        (\))
+    name: meta.image.inline.imarkdown
+  image-ref:
+    captures:
+      '1': {name: punctuation.definition.string.begin.imarkdown}
+      '2': {name: string.other.link.description.imarkdown}
+      '4': {name: punctuation.definition.string.begin.imarkdown}
+      '5': {name: punctuation.definition.constant.imarkdown}
+      '6': {name: constant.other.reference.link.imarkdown}
+      '7': {name: punctuation.definition.constant.imarkdown}
+    match: (\!\[)((?<square>[^\[\]\\]|\\.|\[\g<square>*+\])*+)(\])[ ]?(\[)(.*?)(\])
+    name: meta.image.reference.imarkdown
+  italic:
+    begin: >
+      (?x)
+      (\*(?=\w)|(?<!\w)\*|(?<!\w)\b_)(?=\S)                # Open
+        (?=
+          (
+            <[^>]*+>              # HTML tags
+            | (?<raw>`+)([^`]|(?!(?<!`)\k<raw>(?!`))`)*+\k<raw>
+                              # Raw
+            | \\[\\`*_{}\[\]()#.!+\->]?+      # Escapes
+            | \[
+            (
+                (?<square>          # Named group
+                  [^\[\]\\]        # Match most chars
+                  | \\.            # Escaped chars
+                  | \[ \g<square>*+ \]    # Nested brackets
+                )*+
+              \]
+              (
+                (              # Reference Link
+                  [ ]?          # Optional space
+                  \[[^\]]*+\]        # Ref name
+                )
+                | (              # Inline Link
+                  \(            # Opening paren
+                    [ \t]*+        # Optional whtiespace
+                    <?(.*?)>?      # URL
+                    [ \t]*+        # Optional whtiespace
+                    (          # Optional Title
+                      (?<title>['"])
+                      (.*?)
+                      \k<title>
+                    )?
+                  \)
+                )
+              )
+            )
+            | \1\1                # Must be bold closer
+            | (?!(?<=\S)\1).            # Everything besides
+                              # style closer
+          )++
+          (?<=\S)(?=_\b|\*)\1                # Close
+        )
+    captures:
+      '1': {name: punctuation.definition.italic.imarkdown}
+    end: (?<=\S)(\1)((?!\1)|(?=\1\1))
+    name: markup.italic.imarkdown
+    patterns:
+    - applyEndPatternLast: 1
+      begin: (?=<[^>]*?>)
+      end: (?<=>)
+      patterns:
+      - {include: text.html.derivative}
+    - {include: '#escape'}
+    - {include: '#ampersand'}
+    - {include: '#bracket'}
+    - {include: '#raw'}
+    - {include: '#bold'}
+    - {include: '#image-inline'}
+    - {include: '#link-inline'}
+    - {include: '#link-inet'}
+    - {include: '#link-email'}
+    - {include: '#image-ref'}
+    - {include: '#link-ref-literal'}
+    - {include: '#link-ref'}
+    - {include: '#link-ref-shortcut'}
+  link-email:
+    captures:
+      '1': {name: punctuation.definition.link.imarkdown}
+      '2': {name: markup.underline.link.imarkdown}
+      '4': {name: punctuation.definition.link.imarkdown}
+    match: (<)((?:mailto:)?[-.\w]+@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)(>)
+    name: meta.link.email.lt-gt.imarkdown
+  link-inet:
+    captures:
+      '1': {name: punctuation.definition.link.imarkdown}
+      '2': {name: markup.underline.link.imarkdown}
+      '3': {name: punctuation.definition.link.imarkdown}
+    match: (<)((?:https?|ftp)://.*?)(>)
+    name: meta.link.inet.imarkdown
+  link-inline:
+    captures:
+      '1': {name: punctuation.definition.string.begin.imarkdown}
+      '2': {name: string.other.link.title.imarkdown}
+      '4': {name: punctuation.definition.string.end.imarkdown}
+      '5': {name: punctuation.definition.metadata.imarkdown}
+      '6': {name: punctuation.definition.link.imarkdown}
+      '7': {name: markup.underline.link.imarkdown}
+      '9': {name: punctuation.definition.link.imarkdown}
+      '10': {name: string.other.link.description.title.imarkdown}
+      '11': {name: punctuation.definition.string.begin.imarkdown}
+      '12': {name: punctuation.definition.string.end.imarkdown}
+      '13': {name: string.other.link.description.title.imarkdown}
+      '14': {name: punctuation.definition.string.begin.imarkdown}
+      '15': {name: punctuation.definition.string.end.imarkdown}
+      '16': {name: punctuation.definition.metadata.imarkdown}
+    match: >
+      (?x)
+        (\[)((?<square>[^\[\]\\]|\\.|\[\g<square>*+\])*+)(\])
+                      # Match the link text.
+        (\()            # Opening paren for url
+          (<?)((?<url>(?>[^\s()]+)|\(\g<url>*\))*)(>?)      # The url
+          [ \t]*          # Optional whitespace
+          (?:
+              ((\().+?(\)))    # Match title in parens…
+            | ((").+?("))    # or in quotes.
+          )?            # Title is optional
+          \s*            # Optional whitespace
+        (\))
+    name: meta.link.inline.imarkdown
+  link-ref:
+    captures:
+      '1': {name: punctuation.definition.string.begin.imarkdown}
+      '2': {name: string.other.link.title.imarkdown}
+      '4': {name: punctuation.definition.string.end.imarkdown}
+      '5': {name: punctuation.definition.constant.begin.imarkdown}
+      '6': {name: constant.other.reference.link.imarkdown}
+      '7': {name: punctuation.definition.constant.end.imarkdown}
+    match: (\[)((?<square>[^\[\]\\]|\\.|\[\g<square>*+\])*+)(\])(\[)([^\]]*+)(\])
+    name: meta.link.reference.imarkdown
+  link-ref-literal:
+    captures:
+      '1': {name: punctuation.definition.string.begin.imarkdown}
+      '2': {name: string.other.link.title.imarkdown}
+      '4': {name: punctuation.definition.string.end.imarkdown}
+      '5': {name: punctuation.definition.constant.begin.imarkdown}
+      '6': {name: punctuation.definition.constant.end.imarkdown}
+    match: (\[)((?<square>[^\[\]\\]|\\.|\[\g<square>*+\])*+)(\])[ ]?(\[)(\])
+    name: meta.link.reference.literal.imarkdown
+  link-ref-shortcut:
+    captures:
+      '1': {name: punctuation.definition.string.begin.imarkdown}
+      '2': {name: string.other.link.title.imarkdown}
+      '3': {name: punctuation.definition.string.end.imarkdown}
+    match: (\[)(\S+?)(\])
+    name: meta.link.reference.imarkdown
+  raw:
+    captures:
+      '1': {name: punctuation.definition.raw.imarkdown}
+      '3': {name: punctuation.definition.raw.imarkdown}
+    match: (`+)([^`]|(?!(?<!`)\1(?!`))`)*+(\1)
+    name: markup.inline.raw.string.imarkdown
+scopeName: text.html.imarkdown
+uuid: 0A1D9874-B448-11D9-BD50-000D93B6E43C
