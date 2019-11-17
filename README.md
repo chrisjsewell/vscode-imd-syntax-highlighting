@@ -1,10 +1,10 @@
 # IMarkdown
 
-This is the README for your extension "IMarkdown".
+An extension for a proposed "IMarkdown" specification (similar to RMarkdown).
 
 ## Features
 
-Syntax highlighting and code-folding for IMarkdown:
+Syntax highlighting and code-folding for IMarkdown (`.imd`, `.imarkdown` extensions):
 
 ![Example](images/example.png)
 
