@@ -8,6 +8,9 @@
     },
     "publisher": "chrisjsewell",
     "authors": [
+        "Chris Sewell"
+    ],
+    "repository": {
         "type": "git",
         "url": "https://github.com/chrisjsewell/vscode-imd-syntax-highlighting.git"
     },
