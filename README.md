@@ -18,6 +18,12 @@ Example file, with `.imd` or `.imarkdown` extension:
 
 ![Example](images/example.png)
 
+## TODO
+
+- code-folding for headers
+- syntax highlighting within RST code-block directives
+- A proper language server, with things like header outlines, auto-completion, ...
+
 <!-- ## Features
 
 Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
