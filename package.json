@@ -2,7 +2,7 @@
     "name": "vscode-imarkdown-tm-grammar",
     "displayName": "IMarkdown",
     "description": "A syntax highlighter for a proposed IMarkdown spec",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "engines": {
         "vscode": "^1.40.0"
     },
