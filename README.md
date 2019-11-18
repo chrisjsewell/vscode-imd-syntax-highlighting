@@ -1,12 +1,16 @@
 # IMarkdown
 
-An extension for a proposed "IMarkdown" specification (similar to RMarkdown).
-This syntax extends 'basic' Markdown, by adding code-folding for `:::` blocks,
-and correctly highlighting programming languages in 'chunk' code blocks.
+An extension for a proposed "IMarkdown" specification.
 
-## Features
+This specification would hybridise RMarkdown and RST,
+and thus this language extension adds to the basic [VS Code Markdown](See https://github.com/mjbvz/vscode-markdown-tm-grammar.git) grammar, by adding:
 
-Syntax highlighting and code-folding for IMarkdown (`.imd`, `.imarkdown` extensions):
+- code-folding for RMarkdown chunks and `:::` blocks.
+- correctly highlighting programming languages in chunk code blocks.
+- syntax highlighting of RST roles, directives and comments.
+- code-folding of directive blocks.
+
+Example file, with `.imd` or `.imarkdown` extension:
 
 ![Example](images/example.png)
 

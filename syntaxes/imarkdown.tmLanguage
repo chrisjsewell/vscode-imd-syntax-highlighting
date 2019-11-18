@@ -4430,6 +4430,18 @@
             <key>include</key>
             <string>#link-ref-shortcut</string>
           </dict>
+          <dict>
+            <key>include</key>
+            <string>#rst_inline_comment</string>
+          </dict>
+          <dict>
+            <key>include</key>
+            <string>#rst_role</string>
+          </dict>
+          <dict>
+            <key>include</key>
+            <string>#rst_directives</string>
+          </dict>
         </array>
       </dict>
       <key>ampersand</key>
@@ -5106,6 +5118,53 @@
         <string>(`+)([^`]|(?!(?&lt;!`)\1(?!`))`)*+(\1)</string>
         <key>name</key>
         <string>markup.inline.raw.string.imarkdown</string>
+      </dict>
+      <key>rst_inline_comment</key>
+      <dict>
+        <key>match</key>
+        <string>^(\.\.)\s([^:]+)$</string>
+        <key>name</key>
+        <string>comment.line.rst.imarkdown</string>
+      </dict>
+      <key>rst_role</key>
+      <dict>
+        <key>match</key>
+        <string>(:)([-A-z0-9_.]+)(:)</string>
+        <key>name</key>
+        <string>entity.name.role.rst.imarkdown</string>
+        <key>captures</key>
+        <dict>
+          <key>1</key>
+          <dict>
+            <key>name</key>
+            <string>punctuation.definition.intepreted.rst.imarkdown</string>
+          </dict>
+          <key>2</key>
+          <dict>
+            <key>name</key>
+            <string>entity.name.tag.rst.imarkdown</string>
+          </dict>
+          <key>3</key>
+          <dict>
+            <key>name</key>
+            <string>punctuation.definition.intepreted.rst.imarkdown</string>
+          </dict>
+        </dict>
+      </dict>
+      <key>rst_directives</key>
+      <dict>
+        <key>match</key>
+        <string>^\.\.\s([a-zA-Z-]+)::\s*([a-zA-Z\s\.-]*)\s*$</string>
+        <key>name</key>
+        <string>meta.rst.directive.imarkdown</string>
+        <key>captures</key>
+        <dict>
+          <key>1</key>
+          <dict>
+            <key>name</key>
+            <string>entity.name.type.directive.rst.imarkdown</string>
+          </dict>
+        </dict>
       </dict>
     </dict>
     <key>scopeName</key>

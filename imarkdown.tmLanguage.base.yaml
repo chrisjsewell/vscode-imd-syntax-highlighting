@@ -44,24 +44,6 @@ repository:
     endCaptures:
       '3': {name: punctuation.definition.imarkdown}
     name: markup.fenced_code.block.imarkdown
-  # TODO fenced_div_block (or just first line?)
-  # fenced_div_block:
-  #   begin: (^|\\G)(\\s*)(\:{3,})\\s*\\{([^\s]+)([^\\}]*\\})\\s*$)
-  #   beginCaptures:
-  #     '3':
-  #       name: punctuation.definition.imarkdown
-  #     '4':
-  #       name: entity.name.type.fenced_div.block.language.imarkdown
-  #     '5':
-  #       name: fenced_div.block.imarkdown
-  #       patterns:
-  #         - {include: '#boolean'}
-  #         - {include: '#dblquoted'}
-  #         - {include: '#singlequoted'}
-  #   end: (^|\G)(\2|\s{0,3})(\3)\s*$
-  #   endCaptures:
-  #     '3': {name: punctuation.definition.imarkdown}
-  #   name: markup.fenced_div.block.imarkdown
   boolean:
     name: constant.language.boolean.imarkdown
     match: \b(?i:true|false)\b
@@ -240,6 +222,9 @@ repository:
     - {include: '#link-ref'}
     - {include: '#link-ref-literal'}
     - {include: '#link-ref-shortcut'}
+    - {include: '#rst_inline_comment'}
+    - {include: '#rst_role'}
+    - {include: '#rst_directives'}
   ampersand:
     comment: "imarkdown will convert this for us. We match it so that the HTML grammar will not mark it up as invalid."
     match: '&(?!([a-zA-Z0-9]+|#[0-9]+|#x[0-9a-fA-F]+);)'
@@ -497,5 +482,22 @@ repository:
       '3': {name: punctuation.definition.raw.imarkdown}
     match: (`+)([^`]|(?!(?<!`)\1(?!`))`)*+(\1)
     name: markup.inline.raw.string.imarkdown
+
+  rst_inline_comment:
+    match: ^(\.\.)\s([^:]+)$
+    name: comment.line.rst.imarkdown
+  rst_role:
+    match: (:)([-A-z0-9_.]+)(:)
+    name: entity.name.role.rst.imarkdown
+    captures:
+      '1': {name: punctuation.definition.intepreted.rst.imarkdown} 
+      '2': {name: entity.name.tag.rst.imarkdown}
+      '3': {name: punctuation.definition.intepreted.rst.imarkdown} 
+  rst_directives:
+    match: ^\.\.\s([a-zA-Z-]+)::\s*([a-zA-Z\s\.-]*)\s*$
+    name: meta.rst.directive.imarkdown
+    captures:
+      '1': {name: entity.name.type.directive.rst.imarkdown}
+
 scopeName: text.html.imarkdown
 uuid: 0A1D9874-B448-11D9-BD50-000D93B6E43C
